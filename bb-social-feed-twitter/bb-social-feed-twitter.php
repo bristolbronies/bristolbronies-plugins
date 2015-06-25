@@ -32,11 +32,12 @@ function bb_tweet_feed($account, $limit = 5) {
 		$data = json_decode($twitter->setGetfield($options)->buildOauth($url, $method)->performRequest());
 		$output = '<div class="social-feed">';
 		foreach($data->statuses as $status) {
-			$output .= '<div class="social-feed__item">'
-			         . '<a class="social-feed__source social-feed__source--twitter" href="http://twitter.com/' . $status->user->screen_name . '">' . $status->user->screen_name . '</a>'
+			$output .= '<div class="social-feed__item social-feed__item--twitter">'
 			         . '<div class="social-feed__body">'
+			         . '<a class="social-feed__permalink" href="https://twitter.com/' . $status->user->screen_name . '/status/' . $status->id_str . '">'
+			         . '<time data-timeago class="social-feed__timestamp" datetime="' . date("c", strtotime($status->created_at)) . '" title="' . date("c", strtotime($status->created_at)) . '">' . date("Y-m-d H:i:s", strtotime($status->created_at)) . '</time>'
+			         . '</a>'
 			         . '<div class="content social-feed__content">' . $status->text . '</div>'
-			         . '<time class="social-feed__timestamp" datetime="' . date("c", strtotime($status->created_at)) . '">' . date("Y-m-d H:i:s", strtotime($status->created_at)) . '</time>'
 			         . '</div>'
 			         . '</div>';
 		}
