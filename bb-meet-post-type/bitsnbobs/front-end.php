@@ -25,16 +25,19 @@ function bb_meet_category($post_id, $format = 'name') {
 /**
  * Return the HTML formatted start and end dates for a meet as an HTML5 time element.
  * @param  string $start The start date timestamp.
- * @param  string $end   The end date timestamp.
+ * @param  mixed  $end   The end date timestamp, set to false to not output this at all.
  * @return string        HTML formatted start and end dates.
  */
-function bb_meet_dates($start, $end) {
-	$output = '<time datetime="'.date("c", $start).'">'.date("jS F Y, g:ia", $start).'</time>&ndash;';
-	if(date("Ymd", $start) === date("Ymd", $end)) {
-		$output .= '<time datetime="'.date("c", $end).'">'.date("g:ia", $end).'</time>';
-	}
-	else {
-		$output .= '<time datetime="'.date("c", $end).'">'.date("jS F Y, g:ia", $end).'</time>';
+function bb_meet_dates($start, $end = false) {
+	$output = '<time datetime="'.date("c", $start).'">'.date("jS F Y, g:ia", $start).'</time>';
+	if($end) {
+		$output .= "&ndash;";
+		if(date("Ymd", $start) === date("Ymd", $end)) {
+			$output .= '<time datetime="'.date("c", $end).'">'.date("g:ia", $end).'</time>';
+		}
+		else {
+			$output .= '<time datetime="'.date("c", $end).'">'.date("jS F Y, g:ia", $end).'</time>';
+		}
 	}
 	return $output;
 }
