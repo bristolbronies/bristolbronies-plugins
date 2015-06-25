@@ -32,12 +32,13 @@ function bb_tweet_feed($account, $limit = 5) {
 		$data = json_decode($twitter->setGetfield($options)->buildOauth($url, $method)->performRequest());
 		$output = '<div class="social-feed">';
 		foreach($data->statuses as $status) {
+			$content = bb_tweet_parse($status->text);
 			$output .= '<div class="social-feed__item social-feed__item--twitter">'
 			         . '<div class="social-feed__body">'
 			         . '<a class="social-feed__permalink" href="https://twitter.com/' . $status->user->screen_name . '/status/' . $status->id_str . '">'
 			         . '<time data-timeago class="social-feed__timestamp" datetime="' . date("c", strtotime($status->created_at)) . '" title="' . date("c", strtotime($status->created_at)) . '">' . date("Y-m-d H:i:s", strtotime($status->created_at)) . '</time>'
 			         . '</a>'
-			         . '<div class="content social-feed__content">' . $status->text . '</div>'
+			         . '<div class="content social-feed__content">' . $content . '</div>'
 			         . '</div>'
 			         . '</div>';
 		}
@@ -48,4 +49,17 @@ function bb_tweet_feed($account, $limit = 5) {
 		fclose($file_handler);
 		ob_end_flush();
 	}
+}
+
+function bb_tweet_parse($content) {
+	$find = array(
+		'/((?:[\w\d]+\:\/\/)?(?:[\w\-\d]+\.)+[\w\-\d]+(?:\/[\w\-\d]+)*(?:\/|\.[\w\-\d]+)?(?:\?[\w\-\d]+\=[\w\-\d]+\&?)?(?:\#[\w\-\d]*)?)/', // URLs
+		'/@([a-z0-9_]+)/i' // Usernames
+	);
+	$replace = array(
+		'<a href="$1">$1</a>', // URLs
+		'<a href="https://twitter.com/$1">@$1</a>' // Usernames
+	);
+	$content = preg_replace($find, $replace, $content);
+	return $content; 
 }
