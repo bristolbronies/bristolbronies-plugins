@@ -128,7 +128,7 @@ function bb_facebook_feed($account) {
  */
 function bb_content_parse($content) {
 	$find = array(
-		'/((?:[\w\d]+\:\/\/)?(?:[\w\-\d]+\.)+[\w\-\d]+(?:\/[\w\-\d]+)*(?:\/|\.[\w\-\d]+)?(?:\?[\w\-\d]+\=[\w\-\d]+\&?)?(?:\#[\w\-\d]*)?)/', // URLs
+		'#((https?|ftp)://(\S*?\.\S*?))([\s)\[\]{},;"\':<]|\.\s|$)#i', // URLs
 		'/@([a-z0-9_]+)/i' // Usernames
 	);
 	$replace = array(
