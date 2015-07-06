@@ -52,6 +52,9 @@ function bb_meet_location($id, $format = 'address') {
 	$name = get_the_title($id[0]);
 	$data = get_field("location_address", $id[0]);
 	switch($format) {
+		case 'name':
+			$output = $name;
+			break;
 		case 'address':
 			$output = $name . ', ' . $data['address'];
 			break;
@@ -66,4 +69,19 @@ function bb_meet_location($id, $format = 'address') {
 			break;
 	}
 	return $output;
+}
+
+
+/**
+ * Get a meet runner's avatar from their user ID
+ * @param  int    $id The post ID.
+ * @return string     The URL for their avatar image.
+ */
+function bb_profile_avatar($id) {
+	if($image = get_field("runner_avatar", $id)) {
+		return $image;
+	}
+	else {
+		return "http://1.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=96";
+	}
 }
