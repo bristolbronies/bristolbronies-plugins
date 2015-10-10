@@ -21,10 +21,11 @@ function bb_social_feed($twitterAccount = "", $facebookAccount = "", $limit = 5)
 		include($cache_file);
 	}
 	else {
+		$twitter_feed = bb_tweet_feed($twitterAccount, $limit);
+		$facebook_feed = bb_facebook_feed($facebookAccount);
 		ob_start();
-
 		$timestamp = array();
-		$posts = array_merge(bb_tweet_feed($twitterAccount, $limit), bb_facebook_feed($facebookAccount));
+		$posts = array_merge($twitter_feed, $facebook_feed);
 		foreach($posts as $key => $row) {
 			$timestamp[$key] = $row["timestamp"];
 		}
@@ -73,17 +74,22 @@ function bb_tweet_feed($account, $limit = 15) {
 	$options = "?q=from%3A" . $account . "&count=" . $limit;
 	$method = "GET";
 	$twitter = new TwitterAPIExchange($settings);
-	$data = json_decode($twitter->setGetfield($options)->buildOauth($url, $method)->performRequest());
-	$output = array();
-	foreach($data->statuses as $status) {
-		$output[] = array(
-			"source" => "twitter",
-			"permalink" => "https://twitter.com/" . $status->user->screen_name . "/status/" . $status->id_str,
-			"timestamp" => strtotime($status->created_at),
-			"content" => bb_content_parse($status->text)
-		);
+	if($twitter) { 
+		$data = json_decode($twitter->setGetfield($options)->buildOauth($url, $method)->performRequest());
+		$output = array();
+		foreach($data->statuses as $status) {
+			$output[] = array(
+				"source" => "twitter",
+				"permalink" => "https://twitter.com/" . $status->user->screen_name . "/status/" . $status->id_str,
+				"timestamp" => strtotime($status->created_at),
+				"content" => bb_content_parse($status->text)
+			);
+		}
+		return $output;
 	}
-	return $output;
+	else {
+		return false;
+	}
 }
 
 /**
@@ -92,33 +98,42 @@ function bb_tweet_feed($account, $limit = 15) {
  * @return array           An array of posts.
  */
 function bb_facebook_feed($account) {
-	$data  = file_get_contents("https://graph.facebook.com/" . $account . "/posts?access_token=" . FACEBOOK_ACCESS_TOKEN);
-	$data = json_decode($data, true);
-	$data = $data["data"];
-	$output = array();
-	foreach($data as $status) {
-		switch($status["type"]) {
-			case "photo":
-			case "video":
-			case "link":
-				$content = $status["message"] . " " . $status["link"];
-				break;
-			case "event":
-				$content = $status["description"] . " " . $status["link"];
-				break;
-			default: 
-				$content = $status["message"];
-				break;
+	if($data = file_get_contents("https://graph.facebook.com/" . $account . "/posts?access_token=" . FACEBOOK_ACCESS_TOKEN)) {
+		$data = json_decode($data, true);
+		$data = $data["data"];
+		$output = array();
+		foreach($data as $status) {
+			switch($status["type"]) {
+				case "photo":
+				case "video":
+				case "link":
+					if(strpos($status["message"], $status["link"]) !== false) { 
+						$content = $status["message"];
+					}
+					else {
+						$content = $status["message"] . " " . $status["link"];
+					}
+					break;
+				case "event":
+					$content = $status["description"] . " " . $status["link"];
+					break;
+				default: 
+					$content = $status["message"];
+					break;
+			}
+			$id = explode("_", $status["id"]);
+			$output[] = array(
+				"source" => "facebook",
+				"permalink" => "https://www.facebook.com/" . $id[0] . "/posts/" . $id[1],
+				"timestamp" => strtotime($status["updated_time"]),
+				"content" => bb_content_parse($content)
+			);
 		}
-		$id = explode("_", $status["id"]);
-		$output[] = array(
-			"source" => "facebook",
-			"permalink" => "https://www.facebook.com/" . $id[0] . "/posts/" . $id[1],
-			"timestamp" => strtotime($status["updated_time"]),
-			"content" => bb_content_parse($content)
-		);
+		return $output;
 	}
-	return $output;
+	else {
+		return false;
+	}
 }
 
 /**
