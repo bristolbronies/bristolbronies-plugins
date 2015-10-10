@@ -85,3 +85,16 @@ function bb_profile_avatar($id) {
 		return "http://1.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=96";
 	}
 }
+
+/**
+ * Get a meet runner's biography from their user ID 
+ * @param  int    $id The post ID.
+ * @return string     Their biography contents as HTML.
+ */
+function bb_profile_biography($id) {
+	$content_post = get_post($id);
+	$content = $content_post->post_content;
+	$content = apply_filters('the_content', $content);
+	$content = str_replace(']]>', ']]&gt;', $content);
+	return $content;
+}
