@@ -1,1 +1,10 @@
 /index.php
+bb-social-feed/cache/*
+acf-field-date-time-picker/
+acf-image-crop-add-on/
+admin-menu-editor/
+advanced-custom-fields/
+archives-for-custom-post-types/
+redirection/
+regenerate-thumbnails/
+tinymce-advanced/
