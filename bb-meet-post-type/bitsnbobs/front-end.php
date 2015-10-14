@@ -98,3 +98,17 @@ function bb_profile_biography($id) {
 	$content = str_replace(']]>', ']]&gt;', $content);
 	return $content;
 }
+
+/**
+ * Get a meet runner's banner image from their user ID
+ * @param  int    $id The post ID.
+ * @return mixed      If exists, the image URL. If not returns false.
+ */
+function bb_profile_banner($id) {
+	if($image = get_field("runner_banner", $id)) {
+		return $image['sizes']['large'];
+	}
+	else {
+		return false;
+	}
+}
