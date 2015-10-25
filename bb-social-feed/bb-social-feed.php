@@ -3,6 +3,7 @@
 Plugin Name: Bristol Bronies social feed
 Plugin URI: http://bristolbronies.co.uk/
 Description: Pull down our most recent tweets and Facebook posts. 
+Version: 1.2
 Author: Kimberly Grey
 Author URI: http://greysadventures.com/
 */
