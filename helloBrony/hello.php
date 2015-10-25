@@ -8,26 +8,31 @@ Plugin Name: Hello Brony
 Plugin URI: http://bristolbronies.co.uk/
 Description: Outputs dumb quotes to do with ponies on the WP backend. (Inspired by the default Hello Dolly plugin.)
 Author: Matt Mullenweg / Kimberly Grey
-Version: 1.0
+Version: 1.0.1
 Author URI: http://ma.tt/
 */
 
 function hello_brony_messages() {
 	$messages = "You can't have a nightmare if you never dream.
-Needs to be about twenty percent cooler.
+It needs to be about twenty percent cooler.
 yay.
 I really like her mane!
 I'LL DESTROY HER!
 Clock is ticking, Twilight. Clock. Is. Ticking!
 Betcha can't make a face crazier than this!
-Oatmeal are you crazy?!
+Oatmeal? Are you crazy?!
 Ah-ha! The fun has been doubled!
 You're the most basic of jokes.
 What's soaking wet and clueless? YOUR FACE!
 I just don't know what went wrong!
 Maybe it's just a friendship problem, and it'll all be cleared up in half an hour or so.
 What is a cutie mark but a constant reminder that we're all only one bugbear attack away from oblivion?
-Prepare yourselves, everypony! Winter is coming!";
+Prepare yourselves, everypony! Winter is coming!
+And that's how Equestria was made!
+Eternal chaos comes with chocolate rain, you guys! CHOCOLATE RAIN!
+What fun is there in making sense?
+YOU'RE GOING TO LOVE ME!
+The Great and Powerful Trixie doesn't trust wheels.";
 
 	// Here we split it into lines
 	$messages = explode( "\n", $messages );
