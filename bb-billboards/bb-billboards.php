@@ -40,3 +40,64 @@ function bb_billboard_post_type() {
   register_post_type("billboard", $args);
 }
 add_action("init", "bb_billboard_post_type");
+
+/**
+ * Advanced Custom Fields configuration
+ */
+if(function_exists("register_field_group"))
+{
+    register_field_group(array (
+        'id' => 'acf_billboard-details',
+        'title' => 'Billboard Details',
+        'fields' => array (
+            array (
+                'key' => 'field_533b198500aee',
+                'label' => 'Billboard Image',
+                'name' => 'billboard_image',
+                'type' => 'image_crop',
+                'required' => 1,
+                'save_format' => 'object',
+                'crop_type' => 'hard',
+                'target_size' => 'custom',
+                'width' => 420,
+                'height' => 140,
+                'force_crop' => 'yes',
+                'preview_size' => 'thumbnail',
+                'save_in_media_library' => 'yes',
+                'retina_mode' => 'no',
+            ),
+            array (
+                'key' => 'field_533b199a00aef',
+                'label' => 'Billboard URL',
+                'name' => 'billboard_url',
+                'type' => 'text',
+                'required' => 1,
+                'default_value' => '',
+                'placeholder' => 'http://www.example.com/interesting-cool-things/',
+                'prepend' => '',
+                'append' => '',
+                'formatting' => 'none',
+                'maxlength' => '',
+            ),
+        ),
+        'location' => array (
+            array (
+                array (
+                    'param' => 'post_type',
+                    'operator' => '==',
+                    'value' => 'billboard',
+                    'order_no' => 0,
+                    'group_no' => 0,
+                ),
+            ),
+        ),
+        'options' => array (
+            'position' => 'normal',
+            'layout' => 'default',
+            'hide_on_screen' => array (
+                0 => 'custom_fields',
+            ),
+        ),
+        'menu_order' => 0,
+    ));
+}

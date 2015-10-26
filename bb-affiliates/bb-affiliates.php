@@ -39,3 +39,58 @@ function bb_affiliates_post_type() {
   register_post_type("affiliates", $args);
 }
 add_action("init", "bb_affiliates_post_type");
+
+/**
+ * Advanced Custom Fields configuration
+ */
+if(function_exists("register_field_group"))
+{
+    register_field_group(array (
+        'id' => 'acf_affiliate-details',
+        'title' => 'Affiliate Details',
+        'fields' => array (
+            array (
+                'key' => 'field_533b32e1ee3d0',
+                'label' => 'Affiliate URL',
+                'name' => 'affiliate_url',
+                'type' => 'text',
+                'required' => 1,
+                'default_value' => '',
+                'placeholder' => '',
+                'prepend' => '',
+                'append' => '',
+                'formatting' => 'none',
+                'maxlength' => '',
+            ),
+            array (
+                'key' => 'field_533b32f3ee3d1',
+                'label' => 'Affiliate Image',
+                'name' => 'affiliate_image',
+                'type' => 'image',
+                'required' => 1,
+                'save_format' => 'url',
+                'preview_size' => 'thumbnail',
+                'library' => 'all',
+            ),
+        ),
+        'location' => array (
+            array (
+                array (
+                    'param' => 'post_type',
+                    'operator' => '==',
+                    'value' => 'affiliates',
+                    'order_no' => 0,
+                    'group_no' => 0,
+                ),
+            ),
+        ),
+        'options' => array (
+            'position' => 'normal',
+            'layout' => 'default',
+            'hide_on_screen' => array (
+                0 => 'custom_fields',
+            ),
+        ),
+        'menu_order' => 0,
+    ));
+}
